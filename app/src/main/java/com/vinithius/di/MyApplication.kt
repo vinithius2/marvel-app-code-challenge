@@ -4,6 +4,7 @@ import com.vinithius.datasource.repository.MarvelRemoteDataSource
 import com.vinithius.datasource.repository.MarvelRepository
 import com.vinithius.extension.hashMD5
 import com.vinithius.marvelappchallenge.BuildConfig
+import com.vinithius.marvelappchallenge.MarvelViewModel
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -19,6 +20,10 @@ val repositoryModule = module {
 
 val repositoryDataModule = module {
     single { MarvelRepository(get()) }
+}
+
+val viewModelModule = module {
+    single { MarvelViewModel(get()) }
 }
 
 val networkModule = module {
