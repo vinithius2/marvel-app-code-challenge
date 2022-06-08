@@ -6,19 +6,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.vinithius.marvelappchallenge.databinding.FragmentMarvelListBinding
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 
 class MarvelListFragment : Fragment() {
 
     private val viewModel by sharedViewModel<MarvelViewModel>()
+    private lateinit var binding: FragmentMarvelListBinding
+    private lateinit var adapter: MarvelAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_marvel_list, container, false)
+        binding = FragmentMarvelListBinding.inflate(inflater)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -32,8 +36,12 @@ class MarvelListFragment : Fragment() {
     }
 
     private fun observerHeroes() {
-        viewModel.heroes.observe(viewLifecycleOwner) {
-            Log.i("List heroes", it.toString())
+        val linearLayout = LinearLayoutManager(activity)
+        linearLayout.orientation = LinearLayoutManager.VERTICAL
+        binding.recyclerViewHeroes.layoutManager = linearLayout
+        viewModel.heroes.observe(viewLifecycleOwner) { heroes ->
+            adapter = MarvelAdapter(heroes)
+            binding.recyclerViewHeroes.adapter = adapter
         }
     }
 
