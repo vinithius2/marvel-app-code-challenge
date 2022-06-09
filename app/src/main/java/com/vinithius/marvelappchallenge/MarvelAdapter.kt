@@ -3,10 +3,11 @@ package com.vinithius.marvelappchallenge
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.vinithius.datasource.response.Hero
+import com.squareup.picasso.Picasso
+import com.vinithius.datasource.response.Character
 import com.vinithius.marvelappchallenge.databinding.ViewHolderMarvelBinding
 
-class MarvelAdapter(private val dataSet: List<Hero>) :
+class MarvelAdapter(private val dataSet: List<Character>) :
     RecyclerView.Adapter<MarvelAdapter.MarvelViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MarvelViewHolder {
@@ -26,8 +27,16 @@ class MarvelAdapter(private val dataSet: List<Hero>) :
 
     inner class MarvelViewHolder(private val binding: ViewHolderMarvelBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(hero: Hero) {
-            binding.textViewHero.text = hero.name
+        fun bind(character: Character) {
+            binding.textViewHero.text = character.name
+            with(character.thumbnail) {
+                val image = "$path$IMAGE_SIZE$extension"
+                Picasso.get().load(image).into(binding.imageHero)
+            }
         }
+    }
+
+    companion object {
+        const val IMAGE_SIZE = "/portrait_medium."
     }
 }

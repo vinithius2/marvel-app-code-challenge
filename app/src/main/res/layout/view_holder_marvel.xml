@@ -5,16 +5,26 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="5dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/image_hero"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@android:drawable/btn_star_big_on"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/text_view_hero"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="8dp"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="@+id/image_hero"
+            app:layout_constraintStart_toEndOf="@+id/image_hero"
+            app:layout_constraintTop_toTopOf="@+id/image_hero"
             tools:text="Teste Hero" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

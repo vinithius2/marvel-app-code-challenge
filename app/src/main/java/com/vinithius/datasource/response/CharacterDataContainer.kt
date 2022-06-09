@@ -1,9 +1,9 @@
 package com.vinithius.datasource.response;
 
-data class HeaderHero(
+data class CharacterDataContainer(
     val offset: Int,
     val limit: Int,
     val total: Int,
     val count: Int,
-    val results: List<Hero>
+    val results: List<Character>
 )
