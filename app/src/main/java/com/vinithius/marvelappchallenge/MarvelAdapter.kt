@@ -10,7 +10,7 @@ import com.vinithius.datasource.response.Character
 import com.vinithius.marvelappchallenge.databinding.ViewHolderMarvelBinding
 
 class MarvelAdapter :
-    PagingDataAdapter<Character, MarvelAdapter.MarvelViewHolder>(CHARACTER_COMPARATOR) {
+    PagingDataAdapter<Character, MarvelAdapter.MarvelViewHolder>(COMPARATOR) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MarvelViewHolder {
         val binding = ViewHolderMarvelBinding.inflate(
@@ -42,7 +42,7 @@ class MarvelAdapter :
     companion object {
         const val IMAGE_SIZE = "/portrait_medium."
 
-        private object CHARACTER_COMPARATOR : DiffUtil.ItemCallback<Character>() {
+        private object COMPARATOR : DiffUtil.ItemCallback<Character>() {
             override fun areItemsTheSame(oldItem: Character, newItem: Character): Boolean {
                 return oldItem.id == newItem.id
             }

@@ -8,6 +8,9 @@ import retrofit2.http.Query
 interface MarvelRemoteDataSource {
 
     @GET("characters")
-    suspend fun getHeroes(@Query("offset") offset : Int): CharacterDataWrapper
+    suspend fun getHeroes(
+        @Query("offset") offset: Int,
+        @Query("nameStartsWith") nameStartsWith: String?
+    ): CharacterDataWrapper
 
 }

@@ -9,15 +9,15 @@ import java.io.IOException
 
 class CharacterPagingSource(
     private val marvelRemoteDataSource: MarvelRemoteDataSource,
+    private val nameStartsWith: String?
 ) : PagingSource<Int, Character>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Character> {
         val position = params.key ?: 0
         return try {
-            val response = marvelRemoteDataSource.getHeroes(position)
+            val response = marvelRemoteDataSource.getHeroes(position, nameStartsWith)
             val characters = response.data.results
             LoadResult.Page(data = characters, prevKey = null, nextKey = position + 20)
-
         } catch (e: IOException) {
             LoadResult.Error(e)
         } catch (e: HttpException) {

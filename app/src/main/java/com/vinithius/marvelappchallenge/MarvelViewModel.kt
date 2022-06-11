@@ -12,9 +12,9 @@ class MarvelViewModel(private val repository: MarvelRepository) : ViewModel() {
 
     private var currentResult: Flow<PagingData<Character>>? = null
 
-    fun getCharacter(): Flow<PagingData<Character>> {
+    fun getCharacter(nameStartsWith: String?): Flow<PagingData<Character>> {
         val newResult: Flow<PagingData<Character>> =
-            repository.getHeroes().cachedIn(viewModelScope)
+            repository.getHeroes(nameStartsWith).cachedIn(viewModelScope)
         currentResult = newResult
         return newResult
     }

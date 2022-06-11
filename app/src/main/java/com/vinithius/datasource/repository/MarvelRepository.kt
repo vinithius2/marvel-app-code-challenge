@@ -6,14 +6,10 @@ import com.vinithius.pagination.CharacterPagingSource
 
 class MarvelRepository(private val remoteDataSource: MarvelRemoteDataSource) {
 
-    fun getHeroes() =
-        Pager(
-            config = PagingConfig(
-                pageSize = 20,
-                enablePlaceholders = false
-            ),
+    fun getHeroes(nameStartsWith: String?) =
+        Pager(config = PagingConfig(pageSize = 20, enablePlaceholders = false),
             pagingSourceFactory = {
-                CharacterPagingSource(remoteDataSource)
+                CharacterPagingSource(remoteDataSource, nameStartsWith)
             }
         ).flow
 
