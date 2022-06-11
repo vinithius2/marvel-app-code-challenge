@@ -2,13 +2,15 @@ package com.vinithius.marvelappchallenge
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import com.vinithius.datasource.response.Character
 import com.vinithius.marvelappchallenge.databinding.ViewHolderMarvelBinding
 
-class MarvelAdapter(private val dataSet: List<Character>) :
-    RecyclerView.Adapter<MarvelAdapter.MarvelViewHolder>() {
+class MarvelAdapter :
+    PagingDataAdapter<Character, MarvelAdapter.MarvelViewHolder>(CHARACTER_COMPARATOR) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MarvelViewHolder {
         val binding = ViewHolderMarvelBinding.inflate(
@@ -20,10 +22,11 @@ class MarvelAdapter(private val dataSet: List<Character>) :
     }
 
     override fun onBindViewHolder(holder: MarvelViewHolder, position: Int) {
-        holder.bind(dataSet[position])
+        val currentItem = getItem(position)
+        if (currentItem != null) {
+            holder.bind(currentItem)
+        }
     }
-
-    override fun getItemCount() = dataSet.size
 
     inner class MarvelViewHolder(private val binding: ViewHolderMarvelBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -38,5 +41,15 @@ class MarvelAdapter(private val dataSet: List<Character>) :
 
     companion object {
         const val IMAGE_SIZE = "/portrait_medium."
+
+        private object CHARACTER_COMPARATOR : DiffUtil.ItemCallback<Character>() {
+            override fun areItemsTheSame(oldItem: Character, newItem: Character): Boolean {
+                return oldItem.id == newItem.id
+            }
+
+            override fun areContentsTheSame(oldItem: Character, newItem: Character): Boolean {
+                return oldItem == newItem
+            }
+        }
     }
 }

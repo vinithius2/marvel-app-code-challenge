@@ -1,11 +1,20 @@
 package com.vinithius.datasource.repository
 
-import com.vinithius.datasource.response.CharacterDataWrapper
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import com.vinithius.pagination.CharacterPagingSource
 
 class MarvelRepository(private val remoteDataSource: MarvelRemoteDataSource) {
 
-    suspend fun getHeroes(): CharacterDataWrapper {
-        return remoteDataSource.getHeroes()
-    }
+    fun getHeroes() =
+        Pager(
+            config = PagingConfig(
+                pageSize = 20,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = {
+                CharacterPagingSource(remoteDataSource)
+            }
+        ).flow
 
 }

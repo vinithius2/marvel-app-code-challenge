@@ -1,30 +1,22 @@
 package com.vinithius.marvelappchallenge
 
-import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.vinithius.datasource.repository.MarvelRepository
 import com.vinithius.datasource.response.Character
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.Flow
 
 class MarvelViewModel(private val repository: MarvelRepository) : ViewModel() {
 
-    private val _heroes = MutableLiveData<List<Character>>()
-    val heroes: LiveData<List<Character>>
-        get() = _heroes
+    private var currentResult: Flow<PagingData<Character>>? = null
 
-    fun getHeroes() {
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                repository.getHeroes().run {
-                    _heroes.postValue(this.data.results)
-                }
-            } catch (e: Exception) {
-                Log.e("Error list heroes", e.toString())
-            }
-        }
+    fun getCharacter(): Flow<PagingData<Character>> {
+        val newResult: Flow<PagingData<Character>> =
+            repository.getHeroes().cachedIn(viewModelScope)
+        currentResult = newResult
+        return newResult
     }
+
 }
