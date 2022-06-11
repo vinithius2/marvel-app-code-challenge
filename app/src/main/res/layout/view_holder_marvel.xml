@@ -3,30 +3,66 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_view_holder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="5dp">
+        android:layout_gravity="center"
+        android:layout_marginHorizontal="3dp"
+        android:layout_marginVertical="4dp"
+        app:cardCornerRadius="8dp">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/image_hero"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:src="@android:drawable/btn_star_big_on"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/text_view_hero"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="@+id/image_hero"
-            app:layout_constraintStart_toEndOf="@+id/image_hero"
-            app:layout_constraintTop_toTopOf="@+id/image_hero"
-            tools:text="Teste Hero" />
+            android:padding="5dp">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/image_hero"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@drawable/thumbmailspider"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
+            <TextView
+                android:id="@+id/text_view_hero"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="5dp"
+                android:textSize="18sp"
+                app:layout_constraintStart_toEndOf="@+id/image_hero"
+                app:layout_constraintTop_toTopOf="@+id/image_hero"
+                tools:text="Spider-Man" />
+
+            <include
+                android:id="@+id/shape_series"
+                layout="@layout/include_info_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                app:layout_constraintStart_toStartOf="@+id/text_view_hero"
+                app:layout_constraintTop_toBottomOf="@+id/text_view_hero" />
+
+            <include
+                android:id="@+id/shape_stories"
+                layout="@layout/include_info_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                app:layout_constraintStart_toEndOf="@+id/shape_series"
+                app:layout_constraintTop_toTopOf="@+id/shape_series" />
+
+            <include
+                android:id="@+id/shape_events"
+                layout="@layout/include_info_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                app:layout_constraintStart_toEndOf="@+id/shape_stories"
+                app:layout_constraintTop_toTopOf="@+id/shape_stories" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
 </layout>
