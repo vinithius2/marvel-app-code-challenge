@@ -9,7 +9,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import com.vinithius.marvelappchallenge.R
 import com.vinithius.marvelappchallenge.databinding.LayoutLoadingBinding
 
-class CharacterLoading (context: Context, attrs: AttributeSet?) :
+class ComponentCharacterLoading (context: Context, attrs: AttributeSet?) :
     ConstraintLayout(context, attrs) {
 
     private val binding =

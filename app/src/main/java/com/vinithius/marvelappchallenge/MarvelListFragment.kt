@@ -1,8 +1,9 @@
 package com.vinithius.marvelappchallenge
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.SearchView
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
@@ -38,7 +39,19 @@ class MarvelListFragment : Fragment() {
         settingsToolbar()
         setAdapter()
         searchCharacters()
+        setLayoutError()
         binding.loadingListCharacter.visibility = View.VISIBLE
+    }
+
+    private fun setLayoutError() {
+        val loadingScale: Animation = AnimationUtils.loadAnimation(
+            context,
+            R.anim.captain_marvel_error
+        )
+        binding.errorListCharacter.imageErrorCaptain.startAnimation(loadingScale)
+        binding.errorListCharacter.buttonRefresh.setOnClickListener {
+            searchCharacters()
+        }
     }
 
     private fun settingsToolbar() {
@@ -66,12 +79,10 @@ class MarvelListFragment : Fragment() {
         binding.recyclerViewHeroes.setHasFixedSize(true)
         adapter = MarvelAdapter()
         adapter.addLoadStateListener {
-//            val loading = it.refresh is LoadState.Loading
-//            val error = it.refresh is LoadState.Error
+            binding.errorListCharacter.root.isVisible = it.refresh is LoadState.Error
             val visible = it.refresh is LoadState.Loading && adapter.itemCount == 0
-
-//            binding.progressBarPaging.isVisible = loading
             binding.loadingListCharacter.isVisible = visible
+            binding.recyclerViewHeroes.isVisible = !visible
             if (!visible) {
                 toolbar?.show()
             }
