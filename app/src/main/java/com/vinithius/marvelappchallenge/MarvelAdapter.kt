@@ -32,13 +32,16 @@ class MarvelAdapter :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(character: Character) {
             with(binding) {
+                cardViewHolder.setOnClickListener {
+                    character.resourceURI
+                }
                 textViewHero.text = character.name
                 shapeSeries.textTitle.text = root.resources.getString(R.string.series)
-                shapeSeries.textTitle.text = character.series.available.toString()
+                shapeSeries.textNumber.text = character.series.available.toString()
                 shapeEvents.textTitle.text = root.resources.getString(R.string.events)
-                shapeEvents.textTitle.text = character.events.available.toString()
+                shapeEvents.textNumber.text = character.events.available.toString()
                 shapeStories.textTitle.text = root.resources.getString(R.string.stories)
-                shapeStories.textTitle.text = character.stories.available.toString()
+                shapeStories.textNumber.text = character.stories.available.toString()
                 with(character.thumbnail) {
                     val image = "$path$IMAGE_SIZE$extension"
                     Picasso.get().load(image).into(imageHero)

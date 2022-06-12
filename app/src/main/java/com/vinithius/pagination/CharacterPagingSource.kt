@@ -13,11 +13,13 @@ class CharacterPagingSource(
 ) : PagingSource<Int, Character>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Character> {
-        val position = params.key ?: 0
+        val pageNumber = params.key ?: 0
         return try {
-            val response = marvelRemoteDataSource.getHeroes(position, nameStartsWith)
+            val response = marvelRemoteDataSource.getCharactersList(pageNumber, nameStartsWith)
             val characters = response.data.results
-            LoadResult.Page(data = characters, prevKey = null, nextKey = position + 20)
+            val prevKey = if (pageNumber > 0) pageNumber - 20 else null
+            val nextKey = if (response.data.results.isNotEmpty()) pageNumber + 20 else null
+            LoadResult.Page(data = characters, prevKey = prevKey, nextKey = nextKey)
         } catch (e: IOException) {
             LoadResult.Error(e)
         } catch (e: HttpException) {
