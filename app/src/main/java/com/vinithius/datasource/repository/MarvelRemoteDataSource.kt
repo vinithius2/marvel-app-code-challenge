@@ -1,6 +1,7 @@
 package com.vinithius.datasource.repository
 
 import com.vinithius.datasource.response.CharacterDataWrapper
+import com.vinithius.datasource.response.GeneralDataWrapper
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -18,5 +19,25 @@ interface MarvelRemoteDataSource {
     suspend fun getCharacterDetail(
         @Path("id") id: Int
     ): CharacterDataWrapper
+
+    @GET("characters/{id}/comics")
+    suspend fun getCharacterDetailComics(
+        @Path("id") id: Int
+    ): GeneralDataWrapper
+
+    @GET("characters/{id}/series")
+    suspend fun getCharacterDetailSeries(
+        @Path("id") id: Int
+    ): GeneralDataWrapper
+
+    @GET("characters/{id}/stories")
+    suspend fun getCharacterDetailStories(
+        @Path("id") id: Int
+    ): GeneralDataWrapper
+
+    @GET("characters/{id}/events")
+    suspend fun getCharacterDetailEvents(
+        @Path("id") id: Int
+    ): GeneralDataWrapper
 
 }

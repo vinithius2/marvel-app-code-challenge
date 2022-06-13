@@ -17,7 +17,14 @@ class MarvelRepository(private val remoteDataSource: MarvelRemoteDataSource) {
 
     suspend fun getCharacterDetail(id: Int): Character? {
         return try {
-            remoteDataSource.getCharacterDetail(id).data.results.first()
+            with(remoteDataSource) {
+                val character = getCharacterDetail(id).data.results.first()
+                character.comicsDetail = getCharacterDetailComics(id).data.results
+                character.storiesDetail = getCharacterDetailStories(id).data.results
+                character.seriesDetail = getCharacterDetailSeries(id).data.results
+                character.eventsDetail = getCharacterDetailEvents(id).data.results
+                character
+            }
         } catch (e: NoSuchElementException) {
             null
         }

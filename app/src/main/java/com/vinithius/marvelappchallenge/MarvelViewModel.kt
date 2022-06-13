@@ -22,25 +22,15 @@ class MarvelViewModel(private val repository: MarvelRepository) : ViewModel() {
     val characterDetail: LiveData<Character>
         get() = _characterDetail
 
-    private val _characterListLoading = MutableLiveData<Int>()
-    val characterListLoading: LiveData<Int>
-        get() = _characterListLoading
-
-    private val _characterDetailLoading = MutableLiveData<Int>()
-    val characterDetailLoading: LiveData<Int>
+    private val _characterDetailLoading = MutableLiveData<Boolean>()
+    val characterDetailLoading: LiveData<Boolean>
         get() = _characterDetailLoading
-
-    private val _characterListError = MutableLiveData<Boolean>().apply { value = false }
-    val characterListError: LiveData<Boolean>
-        get() = _characterListError
 
     private val _characterDetailError = MutableLiveData<Boolean>().apply { value = false }
     val characterDetailError: LiveData<Boolean>
         get() = _characterDetailError
 
     private var _idCharacter: Int = 0
-    val idCharacter: Int
-        get() = _idCharacter
 
     fun setIdCharacter(value: Int) {
         _idCharacter = value
@@ -51,30 +41,27 @@ class MarvelViewModel(private val repository: MarvelRepository) : ViewModel() {
     }
 
     fun getCharactersList(nameStartsWith: String? = null): LiveData<PagingData<Character>>? {
-        _characterListLoading.value = View.VISIBLE
         try {
             currentResult = repository.getCharactersList(nameStartsWith).cachedIn(viewModelScope)
         } catch (e: Exception) {
-            _characterListError.value = true
             Log.e("Error list heroes", e.toString())
         }
         return currentResult
     }
 
-    fun getCharactersDetail(id: Int) {
+    fun getCharactersDetail() {
         CoroutineScope(Dispatchers.IO).launch {
-            _characterDetailLoading.postValue(View.VISIBLE)
+            _characterDetailLoading.postValue(true)
             try {
-                repository.getCharacterDetail(id)?.run {
+                repository.getCharacterDetail(_idCharacter)?.run {
                     _characterDetail.postValue(this)
                 }
             } catch (e: Exception) {
                 _characterDetailError.postValue(true)
                 Log.e("Error detail heroes", e.toString())
             } finally {
-                _characterDetailLoading.postValue(View.GONE)
+                _characterDetailLoading.postValue(false)
             }
         }
     }
-
 }

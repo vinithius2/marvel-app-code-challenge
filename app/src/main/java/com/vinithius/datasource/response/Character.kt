@@ -9,5 +9,10 @@ data class Character(
     val series: SummaryContainer,
     val stories: SummaryContainer,
     val events: SummaryContainer,
+    val comics: SummaryContainer,
+    var comicsDetail: List<GeneralDetailsCharacter>,
+    var seriesDetail: List<GeneralDetailsCharacter>,
+    var storiesDetail: List<GeneralDetailsCharacter>,
+    var eventsDetail: List<GeneralDetailsCharacter>,
     val urls: List<Url>,
 )
