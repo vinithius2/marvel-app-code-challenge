@@ -10,4 +10,5 @@
     <string name="error">HYDRA has stolen this request from S.H.I.E.L.D API!</string>
     <string name="call_the_avengers">Call the avengers!</string>
     <string name="captain">Captain Marvel</string>
+    <string name="list_empty">No results</string>
 </resources>

@@ -81,17 +81,22 @@ class MarvelListFragment : Fragment() {
     }
 
     private fun loadState(state: CombinedLoadStates) {
-        val visible = state.refresh is LoadState.Loading && adapter.itemCount == 0
-        binding.loadingListCharacter.isVisible = visible
-        binding.recyclerViewHeroes.isVisible = !visible
-        if (!visible) {
-            toolbar?.show()
+        with(binding) {
+            val visible = state.refresh is LoadState.Loading && adapter.itemCount == 0
+            loadingListCharacter.isVisible = visible
+            recyclerViewHeroes.isVisible = !visible
+            if (!visible) {
+                toolbar?.show()
+            }
+            val error = state.refresh is LoadState.Error
+            errorListCharacter.buttonNetworkAgain.isVisible = error
+            errorListCharacter.textError.isVisible = error
+            errorListCharacter.imageErrorCaptain.isVisible = error
+            recyclerViewHeroes.isVisible = !error
+            if (!error && !loadingListCharacter.isVisible) {
+                textListEmpty.isVisible = adapter.itemCount == 0
+            }
         }
-        val error = state.refresh is LoadState.Error
-        binding.errorListCharacter.buttonNetworkAgain.isVisible = error
-        binding.errorListCharacter.textError.isVisible = error
-        binding.errorListCharacter.imageErrorCaptain.isVisible = error
-        binding.recyclerViewHeroes.isVisible = !error
     }
 
     override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {
