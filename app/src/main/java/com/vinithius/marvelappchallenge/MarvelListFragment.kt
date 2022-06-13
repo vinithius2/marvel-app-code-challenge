@@ -2,14 +2,13 @@ package com.vinithius.marvelappchallenge
 
 import android.os.Bundle
 import android.view.*
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
 import android.widget.SearchView
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.vinithius.marvelappchallenge.databinding.FragmentMarvelListBinding
@@ -31,6 +30,9 @@ class MarvelListFragment : Fragment() {
     ): View? {
         setHasOptionsMenu(true)
         binding = FragmentMarvelListBinding.inflate(inflater)
+        binding.errorListCharacter.buttonNetworkAgain.setOnClickListener {
+            searchCharacters()
+        }
         return binding.root
     }
 
@@ -39,19 +41,8 @@ class MarvelListFragment : Fragment() {
         settingsToolbar()
         setAdapter()
         searchCharacters()
-        setLayoutError()
+        binding.recyclerViewHeroes.visibility = View.GONE
         binding.loadingListCharacter.visibility = View.VISIBLE
-    }
-
-    private fun setLayoutError() {
-        val loadingScale: Animation = AnimationUtils.loadAnimation(
-            context,
-            R.anim.captain_marvel_error
-        )
-        binding.errorListCharacter.imageErrorCaptain.startAnimation(loadingScale)
-        binding.errorListCharacter.buttonRefresh.setOnClickListener {
-            searchCharacters()
-        }
     }
 
     private fun settingsToolbar() {
@@ -79,13 +70,7 @@ class MarvelListFragment : Fragment() {
         binding.recyclerViewHeroes.setHasFixedSize(true)
         adapter = MarvelAdapter()
         adapter.addLoadStateListener {
-            binding.errorListCharacter.root.isVisible = it.refresh is LoadState.Error
-            val visible = it.refresh is LoadState.Loading && adapter.itemCount == 0
-            binding.loadingListCharacter.isVisible = visible
-            binding.recyclerViewHeroes.isVisible = !visible
-            if (!visible) {
-                toolbar?.show()
-            }
+            loadState(it)
         }
         adapter.addOnPagesUpdatedListener {
             with(binding) {
@@ -93,6 +78,20 @@ class MarvelListFragment : Fragment() {
             }
         }
         binding.recyclerViewHeroes.adapter = adapter
+    }
+
+    private fun loadState(state: CombinedLoadStates) {
+        val visible = state.refresh is LoadState.Loading && adapter.itemCount == 0
+        binding.loadingListCharacter.isVisible = visible
+        binding.recyclerViewHeroes.isVisible = !visible
+        if (!visible) {
+            toolbar?.show()
+        }
+        val error = state.refresh is LoadState.Error
+        binding.errorListCharacter.buttonNetworkAgain.isVisible = error
+        binding.errorListCharacter.textError.isVisible = error
+        binding.errorListCharacter.imageErrorCaptain.isVisible = error
+        binding.recyclerViewHeroes.isVisible = !error
     }
 
     override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {

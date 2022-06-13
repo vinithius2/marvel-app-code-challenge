@@ -7,15 +7,14 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.vinithius.marvelappchallenge.R
-import com.vinithius.marvelappchallenge.databinding.IncludeLayoutErrorBinding
+import com.vinithius.marvelappchallenge.databinding.CaptainMarvelBinding
 
-class ComponentCharacterError(context: Context, attrs: AttributeSet?) :
+class ComponentCaptainMarvel(context: Context, attrs: AttributeSet?) :
     ConstraintLayout(context, attrs) {
 
-    var onCallBackClickRefresh: (() -> Unit)? = null
-
     private val binding =
-        IncludeLayoutErrorBinding.inflate(LayoutInflater.from(context), this, true)
+        CaptainMarvelBinding.inflate(LayoutInflater.from(context), this, true)
+
 
     init {
         val loadingScale: Animation = AnimationUtils.loadAnimation(
@@ -23,13 +22,6 @@ class ComponentCharacterError(context: Context, attrs: AttributeSet?) :
             R.anim.captain_marvel_error
         )
         binding.imageErrorCaptain.startAnimation(loadingScale)
-        onCallBackClickRefresh?.invoke()
     }
-
-//    fun setOnClick(click: (() -> Unit)) {
-//        binding.buttonRefresh.setOnClickListener {
-//            click.invoke()
-//        }
-//    }
 
 }
