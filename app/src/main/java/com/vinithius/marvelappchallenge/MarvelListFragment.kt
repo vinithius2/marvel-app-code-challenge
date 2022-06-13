@@ -2,12 +2,13 @@ package com.vinithius.marvelappchallenge
 
 import android.os.Bundle
 import android.view.*
-import androidx.appcompat.widget.SearchView
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,7 +28,7 @@ class MarvelListFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         setHasOptionsMenu(true)
         binding = FragmentMarvelListBinding.inflate(inflater)
         binding.errorListCharacter.buttonNetworkAgain.setOnClickListener {
@@ -47,10 +48,13 @@ class MarvelListFragment : Fragment() {
 
     private fun settingsToolbar() {
         toolbar = (activity as AppCompatActivity?)?.supportActionBar
-        toolbar?.setIcon(R.drawable.marvel_logo_small)
-        toolbar?.setDisplayShowHomeEnabled(true)
-        toolbar?.setDisplayShowTitleEnabled(false)
-        toolbar?.hide()
+        toolbar?.let {
+            it.setIcon(R.drawable.marvel_logo_small)
+            it.setDisplayShowHomeEnabled(true)
+            it.setDisplayHomeAsUpEnabled(false)
+            it.setDisplayShowTitleEnabled(false)
+            it.hide()
+        }
     }
 
     private fun searchCharacters(nameStartsWith: String? = null) {
@@ -66,18 +70,25 @@ class MarvelListFragment : Fragment() {
     private fun setAdapter() {
         val linearLayout = LinearLayoutManager(activity)
         linearLayout.orientation = LinearLayoutManager.VERTICAL
-        binding.recyclerViewHeroes.layoutManager = linearLayout
-        binding.recyclerViewHeroes.setHasFixedSize(true)
-        adapter = MarvelAdapter()
-        adapter.addLoadStateListener {
-            loadState(it)
-        }
-        adapter.addOnPagesUpdatedListener {
-            with(binding) {
+        with(binding) {
+            recyclerViewHeroes.layoutManager = linearLayout
+            recyclerViewHeroes.setHasFixedSize(true)
+            adapter = MarvelAdapter()
+            adapter.addLoadStateListener {
+                loadState(it)
+            }
+            adapter.addOnPagesUpdatedListener {
                 progressBarPaging.isVisible = !progressBarPaging.isVisible
             }
+            recyclerViewHeroes.adapter = adapter.apply {
+                onCallBackClickDetail = { id ->
+                    viewModel.setIdCharacter(id)
+                    findNavController().navigate(
+                        R.id.action_listMarvelFragment_to_detailMarvelFragment,
+                    )
+                }
+            }
         }
-        binding.recyclerViewHeroes.adapter = adapter
     }
 
     private fun loadState(state: CombinedLoadStates) {
@@ -103,7 +114,7 @@ class MarvelListFragment : Fragment() {
         menuInflater.inflate(R.menu.main_menu, menu)
         val item = menu.findItem(R.id.action_search)
         item?.let { menuItem ->
-            searchView = item.actionView as SearchView
+            searchView = menuItem.actionView as SearchView
             searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(nameStartsWith: String?): Boolean {
                     nameStartsWith?.let { searchCharacters(it) }
@@ -135,5 +146,4 @@ class MarvelListFragment : Fragment() {
         }
         return super.onCreateOptionsMenu(menu, menuInflater)
     }
-
 }

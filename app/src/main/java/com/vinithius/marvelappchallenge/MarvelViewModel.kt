@@ -38,6 +38,18 @@ class MarvelViewModel(private val repository: MarvelRepository) : ViewModel() {
     val characterDetailError: LiveData<Boolean>
         get() = _characterDetailError
 
+    private var _idCharacter: Int = 0
+    val idCharacter: Int
+        get() = _idCharacter
+
+    fun setIdCharacter(value: Int) {
+        _idCharacter = value
+    }
+
+    fun resetIdCharacter() {
+        _idCharacter = 0
+    }
+
     fun getCharactersList(nameStartsWith: String? = null): LiveData<PagingData<Character>>? {
         _characterListLoading.value = View.VISIBLE
         try {
@@ -47,10 +59,6 @@ class MarvelViewModel(private val repository: MarvelRepository) : ViewModel() {
             Log.e("Error list heroes", e.toString())
         }
         return currentResult
-    }
-
-    fun finishLoading() {
-        _characterListLoading.postValue(View.GONE)
     }
 
     fun getCharactersDetail(id: Int) {

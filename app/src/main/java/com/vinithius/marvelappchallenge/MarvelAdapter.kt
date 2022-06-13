@@ -12,6 +12,8 @@ import com.vinithius.marvelappchallenge.databinding.ViewHolderMarvelBinding
 class MarvelAdapter :
     PagingDataAdapter<Character, MarvelAdapter.MarvelViewHolder>(COMPARATOR) {
 
+    var onCallBackClickDetail: ((id: Int) -> Unit)? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MarvelViewHolder {
         val binding = ViewHolderMarvelBinding.inflate(
             LayoutInflater.from(parent.context),
@@ -33,7 +35,7 @@ class MarvelAdapter :
         fun bind(character: Character) {
             with(binding) {
                 cardViewHolder.setOnClickListener {
-                    character.resourceURI
+                    onCallBackClickDetail?.invoke(character.id)
                 }
                 textViewHero.text = character.name
                 shapeSeries.textTitle.text = root.resources.getString(R.string.series)
