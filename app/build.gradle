@@ -74,7 +74,7 @@ dependencies {
     // Paging 3
     def paging_version = "3.1.1"
     implementation "androidx.paging:paging-runtime:$paging_version"
-    // Toolbar
-//    def toolbar_version = "27.1.1"
-//    implementation "com.android.support:appcompat-v7:$toolbar_version"
+    // Palette
+    def palette_version = "1.0.0"
+    implementation "androidx.palette:palette:$palette_version"
 }
