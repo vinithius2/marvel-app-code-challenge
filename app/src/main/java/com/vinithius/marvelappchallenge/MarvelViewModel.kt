@@ -1,7 +1,6 @@
 package com.vinithius.marvelappchallenge
 
 import android.util.Log
-import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -18,8 +17,8 @@ class MarvelViewModel(private val repository: MarvelRepository) : ViewModel() {
 
     var currentResult: LiveData<PagingData<Character>>? = null
 
-    private val _characterDetail = MutableLiveData<Character>()
-    val characterDetail: LiveData<Character>
+    private val _characterDetail = MutableLiveData<Character?>()
+    val characterDetail: LiveData<Character?>
         get() = _characterDetail
 
     private val _characterDetailLoading = MutableLiveData<Boolean>()
@@ -36,10 +35,6 @@ class MarvelViewModel(private val repository: MarvelRepository) : ViewModel() {
         _idCharacter = value
     }
 
-    fun resetIdCharacter() {
-        _idCharacter = 0
-    }
-
     fun getCharactersList(nameStartsWith: String? = null): LiveData<PagingData<Character>>? {
         try {
             currentResult = repository.getCharactersList(nameStartsWith).cachedIn(viewModelScope)
@@ -51,6 +46,7 @@ class MarvelViewModel(private val repository: MarvelRepository) : ViewModel() {
 
     fun getCharactersDetail() {
         CoroutineScope(Dispatchers.IO).launch {
+            _characterDetailError.postValue(false)
             _characterDetailLoading.postValue(true)
             try {
                 repository.getCharacterDetail(_idCharacter)?.run {

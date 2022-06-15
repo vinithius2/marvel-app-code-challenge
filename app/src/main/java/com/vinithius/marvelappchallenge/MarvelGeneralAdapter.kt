@@ -3,7 +3,6 @@ package com.vinithius.marvelappchallenge
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isGone
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import com.vinithius.datasource.response.GeneralDetailsCharacter
@@ -33,7 +32,7 @@ class MarvelGeneralAdapter(private val dataSet: List<GeneralDetailsCharacter>) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(general: GeneralDetailsCharacter) {
             binding.textTitle.text = general.title
-            if (general.description != "") {
+            if (!general.description.isNullOrEmpty()) {
                 binding.cardViewMain.setOnClickListener {
                     onCallBackClickDescription?.invoke(general.title, general.description)
                 }

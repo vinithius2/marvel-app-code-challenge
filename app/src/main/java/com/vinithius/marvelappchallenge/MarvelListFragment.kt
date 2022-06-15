@@ -5,6 +5,7 @@ import android.view.*
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -42,8 +43,8 @@ class MarvelListFragment : Fragment() {
         settingsToolbar()
         setAdapter()
         searchCharacters()
-        binding.recyclerViewHeroes.visibility = View.GONE
-        binding.loadingListCharacter.visibility = View.VISIBLE
+        binding.recyclerViewHeroes.isGone = true
+        binding.loadingListCharacter.isGone = false
     }
 
     private fun settingsToolbar() {
@@ -53,7 +54,7 @@ class MarvelListFragment : Fragment() {
             it.setDisplayShowHomeEnabled(true)
             it.setDisplayHomeAsUpEnabled(false)
             it.setDisplayShowTitleEnabled(false)
-            it.hide()
+//            it.hide()
         }
     }
 

@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ScrollView
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -14,12 +15,12 @@ import androidx.palette.graphics.Palette
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.squareup.picasso.Picasso
 import com.vinithius.datasource.response.Character
+import com.vinithius.marvelappchallenge.databinding.BottomsheetDescriptionBinding
 import com.vinithius.marvelappchallenge.databinding.FragmentMarvelDetailBinding
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.vinithius.marvelappchallenge.databinding.BottomsheetDescriptionBinding
 
 
 class MarvelDetailFragment : Fragment() {
@@ -32,19 +33,15 @@ class MarvelDetailFragment : Fragment() {
         (activity as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        viewModel.resetIdCharacter()
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMarvelDetailBinding.inflate(inflater)
-//        binding.errorDetailCharacter.buttonNetworkAgain.setOnClickListener {
-//            viewModel.getCharactersDetail()
-//        }
+        binding.errorDetailCharacter.buttonNetworkAgain.setOnClickListener {
+            viewModel.getCharactersDetail()
+        }
+        binding.scrollDetailCharacter.fullScroll(ScrollView.FOCUS_UP)
         return binding.root
     }
 
@@ -85,11 +82,11 @@ class MarvelDetailFragment : Fragment() {
                 Palette.from(it).generate().run {
                     val light = this.lightVibrantSwatch ?: this.lightMutedSwatch
                     light?.let { color ->
-                        binding.detailContainer.setBackgroundColor(color.rgb)
+                        binding.mainContainer.setBackgroundColor(color.rgb)
                     }
                 }
             }
-        } catch (e : IllegalArgumentException) {
+        } catch (e: IllegalArgumentException) {
             Log.e("setBackgroundColor", e.toString())
         }
     }
@@ -104,10 +101,12 @@ class MarvelDetailFragment : Fragment() {
     private fun observerCharacter() {
         with(viewModel) {
             characterDetail.observe(viewLifecycleOwner) { character ->
-                setTitles(character)
-                setMainCardDetail(character)
-                setEachAdapters(character)
-                setVisibilityAdapters(character)
+                character?.let {
+                    setTitles(it)
+                    setVisibilityAdapters(it)
+                    setMainCardDetail(it)
+                    setEachAdapters(it)
+                }
             }
         }
     }
@@ -116,12 +115,12 @@ class MarvelDetailFragment : Fragment() {
         with(binding) {
             recyclerViewGeneralComics.isGone = character.comicsDetail.isNullOrEmpty()
             cardViewGeneralComics.isGone = character.comicsDetail.isNullOrEmpty()
-            recyclerViewGeneralStories.isGone = character.storiesDetail.isNullOrEmpty()
-            cardViewGeneralStories.isGone = character.storiesDetail.isNullOrEmpty()
             recyclerViewGeneralSeries.isGone = character.seriesDetail.isNullOrEmpty()
             cardViewGeneralSeries.isGone = character.seriesDetail.isNullOrEmpty()
             recyclerViewGeneralEvents.isGone = character.eventsDetail.isNullOrEmpty()
             cardViewGeneralEvents.isGone = character.eventsDetail.isNullOrEmpty()
+            recyclerViewGeneralStories.isGone = character.storiesDetail.isNullOrEmpty()
+            cardViewGeneralStories.isGone = character.storiesDetail.isNullOrEmpty()
         }
     }
 
@@ -132,12 +131,12 @@ class MarvelDetailFragment : Fragment() {
                 recyclerViewGeneralComics
             )
             setGeneralAdapter(
-                MarvelGeneralAdapter(character.storiesDetail),
-                recyclerViewGeneralStories
-            )
-            setGeneralAdapter(
                 MarvelGeneralAdapter(character.seriesDetail),
                 recyclerViewGeneralSeries
+            )
+            setGeneralAdapter(
+                MarvelGeneralAdapter(character.eventsDetail),
+                recyclerViewGeneralEvents
             )
 
             val layoutManager = LinearLayoutManager(activity)
@@ -153,15 +152,19 @@ class MarvelDetailFragment : Fragment() {
         }
     }
 
-    private fun setTitles(character : Character) {
+    private fun setTitles(character: Character) {
         with(binding) {
-            val comicsText = "${resources.getText(R.string.comics)} (${character.comicsDetail.size})"
+            val comicsText =
+                "${resources.getText(R.string.comics)} (${character.comicsDetail.size})"
             textComics.text = comicsText
-            val storiesText = "${resources.getText(R.string.stories)} (${character.storiesDetail.size})"
+            val storiesText =
+                "${resources.getText(R.string.stories)} (${character.storiesDetail.size})"
             textStories.text = storiesText
-            val seriesText = "${resources.getText(R.string.series)} (${character.seriesDetail.size})"
+            val seriesText =
+                "${resources.getText(R.string.series)} (${character.seriesDetail.size})"
             textSeries.text = seriesText
-            val eventsText = "${resources.getText(R.string.events)} (${character.eventsDetail.size})"
+            val eventsText =
+                "${resources.getText(R.string.events)} (${character.eventsDetail.size})"
             textEvents.text = eventsText
         }
     }
@@ -191,9 +194,10 @@ class MarvelDetailFragment : Fragment() {
     private fun observerError() {
         with(viewModel) {
             characterDetailError.observe(viewLifecycleOwner) { error ->
-                binding.errorDetailCharacter.imageErrorCaptain.isVisible = error
-                binding.errorDetailCharacter.textError.isVisible = error
-                binding.errorDetailCharacter.buttonNetworkAgain.isVisible = error
+                binding.errorDetailCharacter.imageErrorCaptain.isGone = !error
+                binding.errorDetailCharacter.textError.isGone = !error
+                binding.errorDetailCharacter.buttonNetworkAgain.isGone = !error
+                binding.scrollDetailCharacter.isGone = error
             }
         }
     }
@@ -201,7 +205,8 @@ class MarvelDetailFragment : Fragment() {
     private fun bottomSheetDescription(title: String, description: String) {
         context?.let {
             val dialog = BottomSheetDialog(it)
-            val bsBinding = BottomsheetDescriptionBinding.inflate(LayoutInflater.from(requireContext()))
+            val bsBinding =
+                BottomsheetDescriptionBinding.inflate(LayoutInflater.from(requireContext()))
             bsBinding.bottomsheetTitle.text = title
             bsBinding.bottomsheetDescription.text = description
             bsBinding.buttomClose.setOnClickListener {
