@@ -54,10 +54,12 @@ class MarvelListFragment : Fragment() {
             it.setDisplayShowHomeEnabled(true)
             it.setDisplayHomeAsUpEnabled(false)
             it.setDisplayShowTitleEnabled(false)
-//            it.hide()
         }
     }
 
+    /**
+     * Function to make the call with or without a filter to search for characters.
+     */
     private fun searchCharacters(nameStartsWith: String? = null) {
         with(viewModel) {
             getCharactersList(nameStartsWith)?.observe(viewLifecycleOwner) {
@@ -76,7 +78,8 @@ class MarvelListFragment : Fragment() {
             recyclerViewHeroes.setHasFixedSize(true)
             adapter = MarvelAdapter()
             adapter.addLoadStateListener {
-                loadState(it)
+                loadStateErro(it)
+                loadStateLoading(it)
             }
             adapter.addOnPagesUpdatedListener {
                 progressBarPaging.isVisible = !progressBarPaging.isVisible
@@ -92,14 +95,12 @@ class MarvelListFragment : Fragment() {
         }
     }
 
-    private fun loadState(state: CombinedLoadStates) {
+    /**
+     * Function to pass the 'error' state to the respective view, in this function it is possible to
+     * enable the component's visibility.
+     */
+    private fun loadStateErro(state: CombinedLoadStates) {
         with(binding) {
-            val visible = state.refresh is LoadState.Loading && adapter.itemCount == 0
-            loadingListCharacter.isVisible = visible
-            recyclerViewHeroes.isVisible = !visible
-            if (!visible) {
-                toolbar?.show()
-            }
             val error = state.refresh is LoadState.Error
             errorListCharacter.buttonNetworkAgain.isVisible = error
             errorListCharacter.textError.isVisible = error
@@ -111,6 +112,21 @@ class MarvelListFragment : Fragment() {
         }
     }
 
+    /**
+     * Function to pass the 'loading' state to the respective view, in this function it is possible
+     * to enable the component's visibility.
+     */
+    private fun loadStateLoading(state: CombinedLoadStates) {
+        with(binding) {
+            val visible = state.refresh is LoadState.Loading && adapter.itemCount == 0
+            loadingListCharacter.isVisible = visible
+            recyclerViewHeroes.isVisible = !visible
+        }
+    }
+
+    /**
+     * Create a search in toolbar.
+     */
     override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.main_menu, menu)
         val item = menu.findItem(R.id.action_search)

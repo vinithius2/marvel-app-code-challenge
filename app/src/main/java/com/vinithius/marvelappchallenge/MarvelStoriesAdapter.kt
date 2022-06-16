@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.vinithius.datasource.response.GeneralDetailsCharacter
 import com.vinithius.marvelappchallenge.databinding.ViewHolderStoriesBinding
 
+
 class MarvelStoriesAdapter(private val dataSet: List<GeneralDetailsCharacter>) :
     RecyclerView.Adapter<MarvelStoriesAdapter.StoriesViewHolder>() {
 

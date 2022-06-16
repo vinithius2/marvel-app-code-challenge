@@ -55,6 +55,10 @@ class MarvelDetailFragment : Fragment() {
         }
     }
 
+    /**
+     * Set values in main card views and call the predominant color capture function when
+     * finish loading the image.
+     */
     private fun setMainCardDetail(character: Character) {
         binding.textTitle.text = character.name
         binding.textDescription.text = character.description
@@ -75,6 +79,9 @@ class MarvelDetailFragment : Fragment() {
         }
     }
 
+    /**
+     * Get the character's predominant color and set it to the main container's background.
+     */
     private fun setBackgroundColor() {
         try {
             val bitmap = getBitmapFromView(binding.imageHero)
@@ -91,6 +98,9 @@ class MarvelDetailFragment : Fragment() {
         }
     }
 
+    /**
+     * Get bitmap from an Image View.
+     */
     private fun getBitmapFromView(view: View): Bitmap? {
         val bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
@@ -111,6 +121,10 @@ class MarvelDetailFragment : Fragment() {
         }
     }
 
+    /**
+     * Set visibility based on API data return, if the respective field is empty or null
+     * is not for displaying the respective view.
+     */
     private fun setVisibilityAdapters(character: Character) {
         with(binding) {
             recyclerViewGeneralComics.isGone = character.comicsDetail.isNullOrEmpty()
@@ -169,6 +183,9 @@ class MarvelDetailFragment : Fragment() {
         }
     }
 
+    /**
+     * set values in general adapter that can handle most of the available data.
+     */
     private fun setGeneralAdapter(
         adapter: MarvelGeneralAdapter,
         recyclerView: RecyclerView

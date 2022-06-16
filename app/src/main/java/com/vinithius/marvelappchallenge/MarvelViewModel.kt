@@ -13,6 +13,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+
 class MarvelViewModel(private val repository: MarvelRepository) : ViewModel() {
 
     var currentResult: LiveData<PagingData<Character>>? = null
@@ -35,6 +36,9 @@ class MarvelViewModel(private val repository: MarvelRepository) : ViewModel() {
         _idCharacter = value
     }
 
+    /**
+     * Get character list using Paging3.
+     */
     fun getCharactersList(nameStartsWith: String? = null): LiveData<PagingData<Character>>? {
         try {
             currentResult = repository.getCharactersList(nameStartsWith).cachedIn(viewModelScope)

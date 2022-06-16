@@ -8,6 +8,7 @@ import com.squareup.picasso.Picasso
 import com.vinithius.datasource.response.GeneralDetailsCharacter
 import com.vinithius.marvelappchallenge.databinding.ViewHolderGeneralBinding
 
+
 class MarvelGeneralAdapter(private val dataSet: List<GeneralDetailsCharacter>) :
     RecyclerView.Adapter<MarvelGeneralAdapter.MarvelGeneralViewHolder>() {
 

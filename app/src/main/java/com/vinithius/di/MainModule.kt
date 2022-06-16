@@ -18,7 +18,6 @@ private val listModules by lazy {
 class MyApplication : Application() {
     override fun onCreate() {
         super.onCreate()
-        // Start Koin
         startKoin {
             androidLogger()
             androidContext(this@MyApplication)
