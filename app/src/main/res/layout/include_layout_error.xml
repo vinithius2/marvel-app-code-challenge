@@ -36,7 +36,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text_error" />
 
-        <com.vinithius.components.ComponentCaptainMarvel
+        <com.vinithius.marvelappchallenge.components.ComponentCaptainMarvel
             android:id="@+id/image_error_captain"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

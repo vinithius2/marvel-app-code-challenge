@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/listMarvelFragment"
-        android:name="com.vinithius.marvelappchallenge.MarvelListFragment">
+        android:name="com.vinithius.marvelappchallenge.ui.MarvelListFragment">
 
         <action
             android:id="@+id/action_listMarvelFragment_to_detailMarvelFragment"
@@ -18,7 +18,7 @@
 
     <fragment
         android:id="@+id/detailMarvelFragment"
-        android:name="com.vinithius.marvelappchallenge.MarvelDetailFragment">
+        android:name="com.vinithius.marvelappchallenge.ui.MarvelDetailFragment">
 
     </fragment>
 

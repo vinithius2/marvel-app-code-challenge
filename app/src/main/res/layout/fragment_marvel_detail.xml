@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.vinithius.components.ComponentCharacterLoading
+        <com.vinithius.marvelappchallenge.components.ComponentCharacterLoading
             android:id="@+id/loading_detail_character"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
